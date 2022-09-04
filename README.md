@@ -57,7 +57,7 @@ pub main() void {
                 const new_y = pos.y + offset_y;
                 
                 // User defined validity function 'IsValid' not shown.
-                if (IsValid(new_x, new_y)) {
+                if (!IsValid(new_x, new_y)) {
                     continue;
                 }
                 const next_pos = SimplePos.init(new_x, new_y);
