@@ -39,12 +39,13 @@ pub main() void {
 
     const PathFinder = Astar(SimplePos, simple_distance);
 
-    const start = SimplePos.init(0, 0);
-    const end = SimplePos.init(4, 4);
-    
     var neighbors = ArrayList(SimplePos).init(allocator);
     defer neighbors.deinit();
     
+    const start = SimplePos.init(0, 0);
+    const end = SimplePos.init(4, 4);
+    
+    var result = try finder.pathFind(start, end);
     while (result == .neighbors) {
         const pos = result.neighbors;
 
