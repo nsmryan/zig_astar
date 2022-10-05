@@ -79,6 +79,7 @@ pub fn Astar(comptime Pos: type, distance: fn (Pos, Pos) usize) type {
             var best = self.next_q.remove();
             for (neighbors) |neighbor| {
                 if (std.meta.eql(neighbor, self.end)) {
+                    try best.path.append(best.current);
                     try best.path.append(self.end);
                     best.current = self.end;
                     return Result(Pos){ .done = best };
