@@ -6,7 +6,7 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const mode = b.standardOptimizeOption(.{});
 
-    _ = b.addModule("zig_astar", .{
+    _ = b.addModule("zig-astar", .{
         .target = target,
         .optimize = mode,
         .root_source_file = b.path("src/main.zig"),
