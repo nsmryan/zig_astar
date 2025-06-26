@@ -29,9 +29,9 @@ const SimplePos = struct {
 };
 
 fn simple_distance(start: SimplePos, end: SimplePos) usize {
-    const x_dist = std.math.absInt(start.x - end.x) catch unreachable;
-    const y_dist = std.math.absInt(start.y - end.y) catch unreachable;
-    return @intCast(usize, std.math.min(x_dist, y_dist));
+    const y_dist = @abs(start.y - end.y);
+    const x_dist = @abs(start.x - end.x);
+    return @intCast(@min(x_dist, y_dist));
 }
 
 pub main() void {

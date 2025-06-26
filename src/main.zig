@@ -62,7 +62,7 @@ pub fn Astar(comptime Pos: type, distance: fn (Pos, Pos) usize) type {
         }
 
         pub fn pathFind(self: *Self, start: Pos, end: Pos) !Result(Pos) {
-            self.next_q.len = 0;
+            self.next_q.items.len = 0;
             self.seen.items.len = 0;
             try self.seen.append(start);
             self.end = end;
@@ -72,7 +72,7 @@ pub fn Astar(comptime Pos: type, distance: fn (Pos, Pos) usize) type {
         }
 
         pub fn step(self: *Self, neighbors: []Pos) !Result(Pos) {
-            if (self.next_q.len == 0) {
+            if (self.next_q.items.len == 0) {
                 return Result(Pos).no_path;
             }
 
@@ -130,9 +130,9 @@ const SimplePos = struct {
 };
 
 fn simple_distance(start: SimplePos, end: SimplePos) usize {
-    const x_dist = std.math.absInt(start.x - end.x) catch unreachable;
-    const y_dist = std.math.absInt(start.y - end.y) catch unreachable;
-    return @intCast(usize, std.math.min(x_dist, y_dist));
+    const y_dist = @abs(start.y - end.y);
+    const x_dist = @abs(start.x - end.x);
+    return @intCast(@min(x_dist, y_dist));
 }
 
 const Map = struct {
@@ -156,13 +156,13 @@ test "pathfinding" {
 
     const blocked: [5][]const bool =
         .{
-        &.{ false, true, false, false, false },
-        &.{ false, true, false, false, false },
-        &.{ false, true, false, false, false },
-        &.{ false, true, false, false, false },
-        &.{ false, false, false, true, false },
-    };
-    var map = Map.init(blocked[0..]);
+            &.{ false, true, false, false, false },
+            &.{ false, true, false, false, false },
+            &.{ false, true, false, false, false },
+            &.{ false, true, false, false, false },
+            &.{ false, false, false, true, false },
+        };
+    const map = Map.init(blocked[0..]);
 
     var result = try finder.pathFind(start, end);
     var neighbors = ArrayList(SimplePos).init(allocator);
@@ -181,7 +181,7 @@ test "pathfinding" {
                 if ((new_x == pos.x and new_y == pos.y) or new_x < 0 or new_y < 0 or new_x > 4 or new_y > 4) {
                     continue;
                 }
-                if (map.blocked[@intCast(usize, new_y)][@intCast(usize, new_x)]) {
+                if (map.blocked[@intCast(new_y)][@intCast(new_x)]) {
                     continue;
                 }
                 const next_pos = SimplePos.init(new_x, new_y);
@@ -191,7 +191,7 @@ test "pathfinding" {
 
         result = try finder.step(neighbors.items);
     }
-    try testing.expectEqual(Result(SimplePos).done, result);
+    try testing.expectEqual(Result(SimplePos).done, @as(std.meta.Tag(Result(SimplePos)), result));
 
     try testing.expectEqual(SimplePos.init(0, 0), result.done.path.items[0]);
     try testing.expectEqual(SimplePos.init(0, 1), result.done.path.items[1]);
