@@ -6,13 +6,11 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const mode = b.standardOptimizeOption(.{});
 
-    const lib = b.addStaticLibrary(.{
-        .name = "zig_astar",
+    _ = b.addModule("zig_astar", .{
         .target = target,
         .optimize = mode,
         .root_source_file = b.path("src/main.zig"),
     });
-    b.installArtifact(lib);
 
     const main_tests = b.addTest(.{
         .root_source_file = b.path("src/main.zig"),
