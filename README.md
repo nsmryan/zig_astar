@@ -1,3 +1,8 @@
+I don't recommend using this repository!
+There is an updated, less buggy version in my Rust Game on https://codeberg.org/tuplestruct/rrl
+I haven't been using GitLab, and I haven't back ported the updated version of this code back to this repo, so please do not trust it!
+
+
 # Zig AStar
 
 This repository contains a simple implementation of the A-Star algorithm in Zig.
